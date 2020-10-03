@@ -1,0 +1,50 @@
+/*-----     list     -----*/
+.mylist{
+    background: #2b4450;
+    color : #dfebed;
+    border-radius: 0px;
+    width: 100%;
+    height: 100%;
+} 
+
+@media (min-width: 576px) and (max-width: 767.98px){
+  .mylist-title{
+     width: 50%;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px){
+    .mylist-title{
+        width: 45%;
+     }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px){
+    .mylist-title{
+        width: 42%;
+     }
+}
+@media (min-width: 1200px) and (max-width:1370px){
+    .mylist-title{
+        width: 38%;
+    }
+}   
+@media(min-width:1371.02px ){
+    .mylist-title{
+        width: 30%;
+    }
+}
+
+.mylist-item{
+    padding-top: 3px;
+}
+.mylist-item-heading{
+    font-weight: 100;
+    padding-right: 2%;
+}
+
+.mylist-item hr{
+    margin-top: 8px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+}

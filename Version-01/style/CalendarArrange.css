@@ -1,0 +1,106 @@
+/*-----     calendar     -----*/
+
+.mycontainer{
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: #c8e8ed;
+}
+
+
+.mycalendar {
+    max-width: 600px;
+    background: #2b4450;
+    color : #dfebed;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .3);
+    font-family: 'Roboto', sans-serif;
+    margin: auto;
+    margin-top: 46px;
+    margin-bottom: 46px;
+}
+
+.yearandmonth{
+    font-weight: 900;
+    font-size: 1.3em;
+    margin:5px;
+}
+
+.calendar-today{
+    padding: 10px;
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.day{
+   font-weight: 600;
+}
+
+.last_month{
+  opacity: .3;
+  padding: 10px;
+  font-weight: 300;
+  font-size: 1.2em;
+}
+.this_month{
+    padding: 10px;
+    font-weight: 300;
+    font-size: 1.2em;
+}
+
+.this_month:hover{
+    color : darkorange;
+  }
+
+
+ /*-----     Arragenment part     -----*/ 
+
+ .arrangement{
+    max-width: 600px;
+    background: #2b4450;
+    color : #dfebed;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .3);
+    font-family: 'Roboto', sans-serif;
+    margin: auto;
+    margin-top: 46px;
+    margin-bottom: 46px;
+ }
+ .arrangement-today{
+     font-weight: 100;
+ }
+  
+ .arrangement-title{
+     font-weight: 100;
+ }
+
+ .arrangement-item{
+     padding-right: 2%;
+ }
+
+ /*-----      Animation Part     -----*/
+
+ .main-enter{
+      opacity: 0;
+      transform: rotateY(180deg);
+ }
+
+ .main-enter-to{
+     opacity: 1;
+     transform: rotateY(0deg);
+ }
+
+ .main-enter-active{
+     transition: all .5s ease;
+ }
+  
+ .main-leave{
+    opacity: 1;
+ }
+
+ .main-leave-to{
+   opacity: 0;
+ }
+
+ .main-leave-active{
+     display: none;
+ }
