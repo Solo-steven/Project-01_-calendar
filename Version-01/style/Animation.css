@@ -1,0 +1,45 @@
+/* animation of  fade item */
+.fade-enter,
+.fade-leave-to{
+   opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave{
+     opacity: 1;
+}
+
+.fade-enter-active,
+.fade-leave-active{
+    transition: all .8s ease;
+}
+
+
+
+
+/* animation of flip page */
+.main-enter{
+    opacity: 0;
+    transform: rotateY(180deg);
+}
+
+.main-enter-to{
+   opacity: 1;
+   transform: rotateY(0deg);
+}
+
+.main-enter-active{
+   transition: all .5s ease;
+}
+
+.main-leave{
+  opacity: 1;
+}
+
+.main-leave-to{
+ opacity: 0;
+}
+
+.main-leave-active{
+   display: none;
+}

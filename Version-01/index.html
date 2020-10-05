@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="style/List.css">
     <link rel="stylesheet" href="style/Navbar.css">
     <link rel="stylesheet" href="style/ResetCommonuse.css">
+    <link rel="stylesheet" href="style/Animation.css">
 
     <title>Managment Your Time!</title>
   </head>
@@ -94,8 +95,10 @@
                               {{study.name}}
                             </div>
                             <div class="col-3" style="opacity: .4;">
-                               <span v-if="study.status">done</span>
-                               <span v-else>to do</span>
+                            <transition name="main"> 
+                               <div v-if="study.status" style="display: inline-block;" key="done" >done</div>
+                               <div v-else  style="display: inline-block;" key="todo" >to do</div>
+                             </transition>   
                             </div>
                          </div> 
                         <hr> 
@@ -110,7 +113,8 @@
               </div>
               <div class="collapse" id="todolist" >
                 <div class="card-body" data-spy="scroll" data-target="#todolistbutton" style="height: 100px; overflow-y: scroll;">
-                   <div class="row"  v-for="todolist in  ToDoList">
+                  <transition-group name="fade">
+                    <div class="row"  v-for="todolist in  ToDoList" :key="todolist.name">
                       <div class="col mylist-item ">
                         <div class="row justify-content-between">
                           <div type="button" class="col-4" v-on:click="onChangeStatus('todolist',todolist.name)"
@@ -119,12 +123,13 @@
                           </div>
                           <div class="col-3"  style="opacity: .4;">
                                <span v-if="todolist.status">done</span>
-                               <span v-else>to do</s\pan>
+                               <span v-else>to do</s\pan>     
                           </div>
                         </div>
                         <hr>
                       </div>
-                   </div>
+                    </div>
+                  </transition-group>
                 </div>
               </div>  
               <div class="card-header navbar" id="workprojectbutton">
@@ -240,12 +245,14 @@
                      <span type="button" class="arrangement-item" v-for="study in ArrangeData.dailystudy" v-on:click="onChangeStatus('dailystudy',study.name)"
                            data-toggle="tooltip" data-placement="right" title="click to finish">
                        {{study.name}}
-                       <span v-if="study.status" style="opacity: .4;">
+                       <transition name="main" mode="out-in">
+                       <div v-if="study.status" style="display: inline-block; opacity: .4;" key="done">
                         {{"(done)"}}
-                       </span>
-                       <span v-else style="opacity: .4;">
+                       </div>
+                       <div v-else style="display: inline-block; opacity: .4;" key="todo">
                         {{ "(to do)"}}
-                       </span>
+                       </div>
+                       </transition>
                      </span>
                   </div>
                   <hr>
@@ -253,8 +260,9 @@
                        <div class="col-2 pr-0 pl-2 arrangement-title" >
                             <span> To do list : </span>
                        </div>
+                       <transition-group name="fade" class="col-10">
                         <span type="button" class="arrangement-item" v-for="todolist in ToDoList" v-on:click="onChangeStatus('todolist',todolist.name)"
-                              data-toggle="tooltip" data-placement="right" title="click to finish">
+                              data-toggle="tooltip" data-placement="right" title="click to finish" :key="todolist.name">
                            {{todolist.name}}
                            <span v-if="todolist.status" style="opacity: .4;">
                               {{"(done)"}}
@@ -262,7 +270,8 @@
                              <span v-else style="opacity: .4;">
                               {{ "(to do)"}}
                              </span>
-                        </span>     
+                        </span> 
+                     </transition-group>     
                   </div>
                   <hr>
                   <div class="row justify-content-left">
@@ -299,7 +308,7 @@
                 <div class="modal-header">
                   <h3 class="modal-title">Add Event</h3>
                   <button type="button" class="close" data-dismiss="modal" v-on:click="clearEventTmp()" >
-                    <span>&times;</span>
+                    <span >&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
@@ -398,7 +407,7 @@
                  <div class="modal-header">
                      <h3 class="modal-title">Delete Event</h3>
                      <button type="button" class="close" data-dismiss="modal" v-on:click="clearEventTmp()" >
-                      <span>&times;</span>
+                      <span >&times;</span>
                     </button>
                  </div>
                  <div class="modal-body">
@@ -469,9 +478,11 @@
                  <div class="modal-header">
                     <h3 class="modal-title">Modify Event</h3>
                     <button type="button" class="close" data-dismiss="modal" v-on:click="clearEventTmp()">
-                        <span>
-                           &times;
+                     <transition>   
+                       <span  >
+                           X
                         </span>
+                     </transition>   
                     </button>
                  </div>
                  <div class="modal-body">  
