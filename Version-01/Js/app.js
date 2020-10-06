@@ -4,6 +4,7 @@ var vm = new Vue({
     data: {
         //--- this object is for show data in calendar
         WindowData: {
+            /* in vue*/ 
             flip: true,
             //--- Today  
             key: {
@@ -12,6 +13,8 @@ var vm = new Vue({
                 date: 0,
                 day: 0,
             },
+            /* in vue */
+
             others: {
                 last_date: [],
                 first_date: [],
@@ -38,6 +41,7 @@ var vm = new Vue({
             minute: []
         },
 
+
         ArrangeData: {
             key: {
                 year: 0,
@@ -51,7 +55,7 @@ var vm = new Vue({
             sideproject: []
         },
 
-        //-- this object is for temp data 
+        //-- this object is for temp data : in component
         EventTmp: {
             search_object: {},
             type: "",
@@ -66,7 +70,7 @@ var vm = new Vue({
             }
         },
 
-        //-- user information
+        //-- user information : in vue body
         DailyCourse: user_course,
         DailyStudy: user_study,
         WorkProject: user_workproject,
@@ -281,7 +285,7 @@ var vm = new Vue({
         },
 
 
-        //----- Up Data event -----//
+        //----- in vue body-----//
         onUpDataEvent(event) {
             if (event === "add") {
                 //---- input incomplet return error.
@@ -463,7 +467,7 @@ var vm = new Vue({
 
         },
 
-        //----- hiden info of up date event.
+        //----- in modal conponent
         checkEmptyEventTmp(event) {
             if (event == "modify") {
                 if (this.EventTmp.search_object == {}) {
@@ -598,6 +602,7 @@ var vm = new Vue({
             this.EventTmp.search_object = {};
         },
 
+        /* in vue body */
         compareObject(event, object) {
             if (event == 'dailycourse') {
                 if (object.name == this.EventTmp.search_object.name) {
