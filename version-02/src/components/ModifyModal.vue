@@ -65,7 +65,7 @@
                      <div class="form-group" v-if=" EventTmp.type === 'sideproject' ">
                         <label>Name</label>
                         <select class="form-control custom-select" v-model="EventTmp.search_object">
-                            <option :value="project" v-for="project in UserInfoSideProject" :key="project.name"> 
+                            <option :value="project" v-for="project in UserInfo.SideProject" :key="project.name"> 
                                {{project.name}}
                             </option>
                         </select>
@@ -139,7 +139,7 @@
 
                  </div>
                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click="onUpDataEvent('modify')">Submit</button>
+                    <button type="button" class="btn btn-primary" v-on:click="emit_UpDataEvent_Signal('modify')">Submit</button>
                  </div>
               </div>
            </div>
@@ -154,6 +154,9 @@ export default {
     methods:{
         clearEventTmp_signal(){
             this.$emit("clearEventTmp_signal");
+        },
+        emit_UpDataEvent_Signal(ActionType){
+            this.$emit("upDataEvent",ActionType);
         }
     }
 }

@@ -91,7 +91,7 @@
 
                 </div>
                 <div class="modal-footer">
-                   <button type="button" class="btn btn-primary" v-on:click="onUpDataEvent('add')">Submit</button>
+                   <button type="button" class="btn btn-primary" v-on:click="emit_UpDataEvent_Signal('add')">Submit</button>
                 </div>
              </div>
           </div>
@@ -106,6 +106,10 @@ export default {
      methods:{
         clearEventTmp_signal(){
             this.$emit("clearEventTmp_signal");
+        },
+        emit_UpDataEvent_Signal(actiontype){
+            console.log(actiontype);
+            this.$emit("upDataEvent",actiontype);
         }
     }  
 }

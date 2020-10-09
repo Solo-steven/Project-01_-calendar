@@ -1,27 +1,16 @@
 <template>
-  <div id="app" class="container-fluid p-0 mycontainer fillfather">
-    <div class="row">
-      <div class="col">
-          <MyNavbar></MyNavbar>
-      </div>
-    </div>
-    <div class="row">
-       <div class="col-4 collapse" id="list">
-          <MyList :UserInfo="UserInfo" class="fillfather"></MyList>
-       </div>
-       <div class="col-8">
-         <MyCalendar></MyCalendar>
-       </div>
-    </div>
-
-    <Modal :UserInfo="UserInfo"></Modal>
-  </div>
+<div id="app">
+ <MyNavbar></MyNavbar>
+ <MyList :UserInfo="UserInfo"></MyList>
+  <MyModal :UserInfo="UserInfo" @upDataEvent="onUpDataEvent"></MyModal> 
+</div>
 </template>
 
 <script>
-import Modal from './components/Modal.vue'
+import MyModal from './components/MyModal.vue'
 import MyNavbar from './components/MyNavbar'
 import MyList from './components/MyList'
+//import MyCalendar from './components/MyCalendar.vue'
 //import {user_course , user_study, user_workproject, user_sideproject, user_todolist} from './TestInfo'
 
 const user_course=[
@@ -221,9 +210,10 @@ const user_sideproject=[
 export default {
   name: 'App',
   components: {
-    Modal,
+    MyModal,
     MyNavbar,
-    MyList
+    MyList,
+   // MyCalendar
   },
   data:function(){
     return {
@@ -235,6 +225,333 @@ export default {
           ToDoList: user_todolist,
        }
     }
+  },
+  methods:{
+        /* Up Data from Modal -  Add Delete and modify event*/
+        onUpDataEvent(actiontype, EventTmp) {
+            if (actiontype === "add") 
+            {
+                this.onAddEvent(EventTmp);
+                return;
+            }
+            else if (actiontype === "delete") 
+            {
+                this.onDeleteEvent(EventTmp); 
+                return;    
+            }
+            else if (actiontype === "modify") 
+            {
+                this.onModifyEvent(EventTmp);
+                return;          
+            }
+
+        },
+       
+        onAddEvent(EventTmp){
+            if (EventTmp.type === "dailycourse") 
+            {
+                    this.UserInfo.DailyCourse.push({
+                        name: EventTmp.name,
+                        day: EventTmp.day,
+                        status: 0,
+                        start_time: [EventTmp.start_time[0], EventTmp.start_time[1]],
+                        end_time: [EventTmp.end_time[0], EventTmp.end_time[1]],
+                    });
+
+                    this.UserInfo.DailyCourse.sort(this.sortDailyCourse);
+                    console.log("Add - Updata - Dailycourse " , this.UserInfo.DailyCourse);
+            }
+                else if (EventTmp.type === "dailystudy") {
+                    this.UserInfo.DailyStudy.push({
+                            name: EventTmp.name,
+                            day: EventTmp.day,
+                            status: 0
+                        });
+                        this.UserInfo.DailyStudy.sort(this.sortDailyStudy);
+
+                        console.log("Add - Updata - DailyStudy ", this.UserInfo.DailyStudy);
+                    }
+                    else if (EventTmp.type === "todolist") {
+                        this.UserInfo.ToDoList.push({
+                            name: EventTmp.name,
+                            status: 0
+                        });
+                        console.log("Add - Updata - TodoList ", this.UserInfo.ToDoList);
+                    }
+                    else if (EventTmp.type === "workproject") {
+
+                        this.UserInfo.WorkProject.push({
+                            name: EventTmp.name,
+                            deadline: {
+                                year: EventTmp.deadline.year,
+                                month: EventTmp.deadline.month,
+                                date: EventTmp.deadline.date
+                            },
+                            status: 0
+                        });
+                        this.UserInfo.WorkProject.sort(this.sortProject);
+                        console.log("Add - Updata - WorkProject " ,this.UserInfo.WorkProject);
+                    }
+                    else if (EventTmp.type === "sideproject") {
+
+                        this.UserInfo.SideProject.push({
+                            name: EventTmp.name,
+                            deadline: {
+                                year: EventTmp.deadline.year,
+                                month: EventTmp.deadline.month,
+                                date: EventTmp.deadline.date
+                            },
+                            status: 0
+                        });
+                        this.UserInfo.SideProject.sort(this.sortProject);
+                        console.log("Add - Updata - SideProject ", this.UserInfo.SideProject);
+                    }
+                    return;
+        },
+        onDeleteEvent(EventTmp){
+            console.log(EventTmp.name);
+            if (EventTmp.type === "dailycourse") 
+             {
+                 this.UserInfo.DailyCourse = this.UserInfo.DailyCourse.filter(index => !this.compareObject("dailycourse", index, EventTmp));
+                 console.log(" Delete - Updata - Dailycourse ", this.UserInfo.DailyCourse);
+             }
+            else if (EventTmp.type === "dailystudy") 
+            {
+                this.UserInfo.DailyStudy = this.UserInfo.DailyStudy.filter(index => !this.compareObject("dailystudy", index, EventTmp));
+                console.log(" Delete - Updata - DailyStudy ", this.UserInfo.DailyStudy);
+            }
+            else if (EventTmp.type === "todolist") 
+            {
+                this.UserInfo.ToDoList = this.UserInfo.ToDoList.filter(index => !this.compareObject("todolist", index, EventTmp));
+                console.log(" Delete - Updata - ToDoList ", this.UserInfo.ToDoList);
+            }
+            else if (EventTmp.type === "workproject") 
+            {
+                this.UserInfo.WorkProject = this.UserInfo.WorkProject.filter(index => !this.compareObject("workproject", index ,EventTmp));
+                console.log(" Delete - Updata - WorkProject ", this.UserInfo.WorkProject);
+            }
+            else if (EventTmp.type === "sideproject") 
+            {
+                this.UserInfo.SideProject = this.UserInfo.SideProject.filter(index => !this.compareObject("sideproject", index ,EventTmp));
+                console.log("Delete - Updata - WorkProject ", this.UserInfo.SideProject);
+            }
+            return;    
+        }, 
+        onModifyEvent(EventTmp){
+            if (EventTmp.type == "dailycourse") 
+            {
+                for (var i = 0; i < this.UserInfo.DailyCourse.length; ++i) 
+                {
+                    if (this.compareObject("dailycourse", this.UserInfo.DailyCourse[i], EventTmp)) 
+                    {
+                        this.UserInfo.DailyCourse[i] = {
+                            name: EventTmp.name,
+                            day: EventTmp.day,
+                            status: 0,
+                            start_time: [EventTmp.start_time[0], EventTmp.start_time[1]],
+                            end_time: [EventTmp.end_time[0], EventTmp.end_time[1]],
+                        };
+                        this.UserInfo.DailyCourse.sort(this.sortDailyCourse);
+                        console.log(" Modify - Updata - DailyCourse ", this.UserInfo.DailyCourse);                              
+                        return;
+                    }
+                }
+            }
+            else if (EventTmp.type == "dailystudy") 
+            {
+                for (var i = 0; i < this.UserInfo.DailyStudy.length; ++i) 
+                {
+                    if (this.compareObject("dailystudy", this.UserInfo.DailyStudy[i],EventTmp)) 
+                    {
+                        this.UserInfo.DailyStudy[i] = {
+                            name: EventTmp.name,
+                            day: EventTmp.day,
+                            status: 0
+                        };
+                        this.UserInfo.DailyStudy.sort(this.sortDailyStudy);
+                        console.log(" Modify - Updata - DailyStudy ", this.UserInfo.DailyStudy);   
+                        return;
+                    }
+                }
+            }
+            else if (EventTmp.type == "todolist") 
+            {
+                for (var i = 0; i < this.UserInfo.ToDoList.length; ++i) 
+                {
+                    if (this.compareObject("todolist", this.UserInfo.ToDoList[i], EventTmp))
+                    {
+                        this.UserInfo.ToDoList[i] = {
+                            name: EventTmp.name,
+                            status: 0
+                        };
+                        console.log(" Modify - Updata - ToDoList ", this.UserInfo.ToDoList);   
+                        return;
+                    }
+                }
+            }
+            else if (EventTmp.type == "workproject") 
+            {
+                for (var i = 0; i < this.UserInfo.WorkProject.length; ++i) 
+                {
+                    if (this.compareObject("workproject", this.UserInfo.WorkProject[i],EventTmp)) 
+                    {
+                        this.UserInfo.WorkProject[i] = {
+                            name: EventTmp.name,
+                            deadline: {
+                                year: EventTmp.deadline.year,
+                                month: EventTmp.deadline.month,
+                                date: EventTmp.deadline.date
+                            },
+                            status: 0
+                        }
+                        this.UserInfo.WorkProject.sort(this.sortProject);
+                        console.log(" Modify - Updata - WorkProject ", this.UserInfo.WorkProject);   
+                        return
+                    }
+                }
+            }
+            else if (EventTmp.type == "sideproject") 
+            {
+                for (var i = 0; i < this.UserInfo.SideProject.length; ++i) 
+                {
+                    if (this.compareObject("sideproject", this.UserInfo.SideProject[i] , EventTmp)) 
+                    {
+                        this.UserInfo.SideProject[i] = {
+                            name: EventTmp.name,
+                            deadline: {
+                                year: EventTmp.deadline.year,
+                                month: EventTmp.deadline.month,
+                                date: EventTmp.deadline.date
+                            },
+                            status: 0
+                        };
+                        this.UserInfo.SideProject.sort(this.sortProject);
+                        console.log(" Modify - Updata - DailyCourse ", this.UserInfo.SideProject);   
+                        return;
+                    }
+                }
+            }
+            return;
+        },
+ 
+        compareObject(event, object ,EventTmp) {
+            if (event == 'dailycourse') {
+                if (object.name == EventTmp.search_object.name) {
+                    if (object.day == EventTmp.search_object.day) {
+                        if (object.start_time[0] == EventTmp.search_object.start_time[0] &&
+                            object.start_time[1] == EventTmp.search_object.start_time[1]) {
+                            if (object.end_time[0] == EventTmp.search_object.end_time[0] &&
+                                object.end_time[1] == EventTmp.search_object.end_time[1]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            if (event == 'dailystudy') {
+                if (object.name == EventTmp.search_object.name) {
+                    if (object.day == EventTmp.search_object.day) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (event == 'todolist') {
+                if (object.name == EventTmp.search_object.name) {
+                    return true;
+                }
+                return false;
+            }
+            if (event == 'workproject') {
+                if (object.name == EventTmp.search_object.name) {
+                    if (object.deadline.year == EventTmp.search_object.deadline.year &&
+                        object.deadline.month == EventTmp.search_object.deadline.month &&
+                        object.deadline.date == EventTmp.search_object.deadline.date) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (event == 'sideproject') {
+                if (object.name == EventTmp.search_object.name) {
+                    if (object.deadline.year == EventTmp.search_object.deadline.year &&
+                        object.deadline.month == EventTmp.search_object.deadline.month &&
+                        object.deadline.date == EventTmp.search_object.deadline.date) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        },
+        
+        sortDailyCourse(a, b) {
+            var a_day = a.day, b_day = b.day;
+            if (a.day === 0)
+                a_day = 7;
+            if (b.day === 0)
+                b_day = 7;
+
+            if (a_day > b_day)
+                return 1;
+
+            if (a_day < b_day)
+                return -1;
+            if (a.start_time[0].value < b.start_time[0].value)
+                return -1;
+
+            if (a.start_time[0].value > b.start_time[0].value)
+                return 1;
+
+            if (a.start_time[0].value === b.start_time[0].value) {
+                if (a.start_time[1].value > b.start_time[1].value)
+                    return -1;
+
+                if (a.start_time[1].value < b.start_time[1].value)
+                    return 1;
+                return 0;
+            }
+        },
+        sortDailyStudy(a, b) {
+            var a_day = a.day, b_day = b.day;
+            if (a.day === 0)
+                a_day = 7;
+            if (b.day === 0)
+                b_day = 7;
+            if (a_day > b_day)
+                return 1;
+            if (a_day < b_day)
+                return -1;
+            if (a_day === b_day)
+                return 0;
+        },
+        sortProject(a, b) {
+            if (a.deadline.year < b.deadline.year) {
+                return -1
+            }
+            if (a.deadline.year > b.deadline.year) {
+                return 1;
+            }
+            if (a.deadline.year === b.deadline.year) {
+                if (a.deadline.month < b.deadline.month) {
+                    return -1;
+                }
+                if (a.deadline.month > b.deadline.month) {
+                    return 1;
+                }
+                if (a.deadline.month === b.deadline.month) {
+                    if (a.deadline.date < b.deadline.date) {
+                        return -1;
+                    }
+                    if (a.deadline.date > b.deadline.date) {
+                        return 1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+            }
+        }
   }
 
 }
@@ -247,15 +564,12 @@ export default {
     background-color: #c8e8ed;
 }
 /*-----     commmon use     ------*/
-.fillfather{
-    height: 100%;
-    width: 100%;
+
+.fill-heigth{
+   height: 100%;
 }
 
-.m-0{
-  margin: 0px;   
-}
-.p-0{
-   padding: 0px;
+.fill-width{
+   width: 100%;
 }
 </style>

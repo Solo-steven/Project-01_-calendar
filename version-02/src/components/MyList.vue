@@ -1,10 +1,6 @@
 <template>
-
-       
-
           <!-----     Project List Part     --->
-          
-            <div class="card mylist ">
+            <div class="card mylist">
               <div class="card-header navbar" id="dailycoursebotton" >
                   <button class="btn btn-info  mylist-title" data-toggle="collapse" data-target="#dailycourse" type="button">
                     Daily Course
@@ -26,7 +22,7 @@
                          </div>
                          <hr>
                       </div>
-                    </div>
+                    </div>s
                 </div>
               </div>
               <div class="card-header navbar" id="dailystudybutton" >
@@ -153,6 +149,7 @@ export default {
 
 <style scoped>
      /*-----     list     -----*/
+
 .mylist{
     background: #2b4450;
     color : #dfebed;

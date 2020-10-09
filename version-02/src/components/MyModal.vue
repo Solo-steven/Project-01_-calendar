@@ -1,12 +1,16 @@
 <template>
     <div>
-         <AddModal id="addevent" :EventTmp="EventTmp" :EventData="EventData" @clear="clearEventTmp()">
+         <AddModal id="addevent" :EventTmp="EventTmp" :EventData="EventData" 
+                      @clearEventTmp_signal="clearEventTmp"
+                      @upDataEvent="emit_upDataEvent">
          </AddModal>
-         <DeleteModal id="deleteevent" :EventTmp="EventTmp" :EventData="EventData" 
-                      :UserInfo="UserInfo" @clearEventTmp_signal="clearEventTmp()">
+         <DeleteModal id="deleteevent" :EventTmp="EventTmp" :EventData="EventData" :UserInfo="UserInfo"
+                       @clearEventTmp_signal="clearEventTmp"
+                       @upDataEvent="emit_upDataEvent">
          </DeleteModal>
-         <ModifyModal id="modifyevent" :EventTmp="EventTmp" :EventData="EventData" 
-                       :UserInfo="UserInfo" @clearEventTmp_signal="clearEventTmp()">
+         <ModifyModal id="modifyevent" :EventTmp="EventTmp" :EventData="EventData" :UserInfo="UserInfo"
+                      @clearEventTmp_signal="clearEventTmp" 
+                      @upDataEvent="emit_upDataEvent">
          </ModifyModal>
     </div>
 </template>
@@ -17,7 +21,7 @@ import DeleteModal from './DeleteModal.vue'
 import ModifyModal from './ModifyModal.vue'
 
 export default {
-    name:"Modal",
+    name:"MyModal",
     props:["UserInfo"],
     components: {
         AddModal,
@@ -49,6 +53,37 @@ export default {
             minute: []
         },
     }
+   },
+   created(){
+       for (var i = 0; i < 24; ++i) {
+            if (i < 10) {
+                this.EventData.hour.push({
+                    text: "0" + i,
+                    value: i
+                });
+            }
+            else {
+                this.EventData.hour.push({
+                    text: String(i),
+                    value: i
+                });
+            }
+        }
+
+        for (var i = 0; i < 60; ++i) {
+            if (i < 10) {
+                this.EventData.minute.push({
+                    text: "0" + i,
+                    value: i
+                });
+            }
+            else {
+                this.EventData.minute.push({
+                    text: String(i),
+                    value: i
+                });
+            }
+        }
    },
    methods: {
          checkEmptyEventTmp(event) {
@@ -184,11 +219,11 @@ export default {
             };
             this.EventTmp.search_object = {};
         },
-   }
+         emit_upDataEvent(actiontype){ 
+            this.$emit("upDataEvent", actiontype, this.EventTmp)
+         }
+   }    
     
 }
 </script>
 
-<style scoped>
-
-</style>

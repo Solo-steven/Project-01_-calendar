@@ -26,7 +26,7 @@
                        <label>Delete Course</label>
                        <select class="form-control custom-select" v-model="EventTmp.search_object">
                             <option :value="course" v-for="course in UserInfo.DailyCourse" :key="course.name" >
-                               {{course.name}}
+                               {{ course.name }}
                             </option>
                        </select>
                    </div>
@@ -36,7 +36,7 @@
                       <label >Delete Study Plan</label>
                       <select class="form-control custom-select" v-model="EventTmp.search_object">
                          <option :value="study" v-for="study in UserInfo.DailyStudy" :key="study.name">
-                            {{study.name}}
+                            {{ study.name }}
                          </option>
                       </select>
                    </div>
@@ -46,7 +46,7 @@
                      <label >Delete To Do List</label>
                      <select class="form-control custom-select" v-model="EventTmp.search_object">
                          <option :value="todo" v-for="todo in UserInfo.ToDoList" :key="todo.name">
-                            {{todo.name}}
+                            {{ todo.name }}
                         </option>
                       </select>
                    </div>
@@ -56,7 +56,7 @@
                      <label>Delete Work Project </label>
                       <select class="form-control custom-select" v-model="EventTmp.search_object">
                           <option :value="project" v-for="project in UserInfo.WorkProject" :key="project.name">
-                             {{project.name}}
+                             {{ project.name }}
                           </option>
                       </select>
                    </div>
@@ -66,14 +66,14 @@
                     <label>Delete Side Project </label>
                      <select  class="form-control custom-select" v-model="EventTmp.search_object">
                         <option :value="project" v-for="project in UserInfo.SideProject" :key="project.name">
-                           {{project.name}}
+                           {{ project.name }}
                         </option>
                      </select>
                    </div>
     
                  </div>
                  <div class="modal-footer">
-                     <button type="button" class="btn btn-primary" v-on:click="onUpDataEvent('delete')" >Submit</button>
+                     <button type="button" class="btn btn-primary" v-on:click="emit_UpDataEvent_Signal('delete')" >Submit</button>
                  </div>
               </div>
            </div>
@@ -89,6 +89,9 @@ export default {
     methods:{
         clearEventTmp_signal(){
             this.$emit("clearEventTmp_signal");
+        },
+        emit_UpDataEvent_Signal(actiontype){
+            this.$emit("upDataEvent",actiontype);
         }
     }
 }
