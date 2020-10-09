@@ -1,7 +1,34 @@
 <template>
-<div id="app">
- <MyNavbar></MyNavbar>
- <MyList :UserInfo="UserInfo"></MyList>
+<div id="app" class="myApp"> 
+   <div class="container-fluid p-0  fill-heigth fill-width">
+       <div class="row my-navbar m-0" >
+          <div class="col p-0">
+               <MyNavbar></MyNavbar>
+          </div>
+       </div>
+       <div class="row my-window m-0 justify-content-center">
+           <div class="col-4 p-0 fade collapse " id="list">
+               <MyList :UserInfo="UserInfo" 
+                       @changeStatus="onChangeStatus">
+               </MyList>
+           </div>
+           <div class="col-8 p-0">
+               <div class="row m-0 fill-heigth justify-content-center align-content-center">
+                   <div class="col p-0 ">
+                        <transition name="flip"> 
+                          <MyCalendar v-if="flip==false" 
+                                 @checkArrangement="onCheckArrangement">
+                          </MyCalendar>
+                          <MyArragenment v-else 
+                                 @switchCalendarArrangement="onSwitchCalendarArrangement"
+                                 @changeStatus="onChangeStatus">
+                          </MyArragenment>
+                        </transition> 
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div> 
   <MyModal :UserInfo="UserInfo" @upDataEvent="onUpDataEvent"></MyModal> 
 </div>
 </template>
@@ -10,7 +37,8 @@
 import MyModal from './components/MyModal.vue'
 import MyNavbar from './components/MyNavbar'
 import MyList from './components/MyList'
-//import MyCalendar from './components/MyCalendar.vue'
+import MyCalendar from './components/MyCalendar.vue'
+import MyArragenment from './components/MyArrangement.vue'
 //import {user_course , user_study, user_workproject, user_sideproject, user_todolist} from './TestInfo'
 
 const user_course=[
@@ -213,10 +241,12 @@ export default {
     MyModal,
     MyNavbar,
     MyList,
-   // MyCalendar
+    MyCalendar,
+    MyArragenment
   },
   data:function(){
     return {
+       flip:false, 
        UserInfo:{
           DailyCourse: user_course,
           DailyStudy: user_study,
@@ -227,7 +257,27 @@ export default {
     }
   },
   methods:{
-        /* Up Data from Modal -  Add Delete and modify event*/
+    
+    /*---------------------------------------------------------------------------------------------*/
+    /*   Part One   -----   -----   -----  Switch Calendar and Arrangement -----   -----   -----   */ 
+    /*---------------------------------------------------------------------------------------------*/
+    onCheckArrangement(date){
+      this.onSwitchCalendarArrangement();
+    },
+    onSwitchCalendarArrangement(){  
+      this.flip= !this.flip;
+    },
+
+    /*----------------------------------------------------------------------------------*/
+    /*   -----   -----   -----  Switch Calendar and Arrangement -----   -----   -----   */ 
+    /*----------------------------------------------------------------------------------*/
+    
+
+    /*----------------------------------------------------------------------------------*/
+    /*   Part Two   -----   -----   -----   Event Data Change   -----   -----   -----   */  
+    /*----------------------------------------------------------------------------------*/
+
+        /* Up Data from Modal -  Add、Delete and modify event*/
         onUpDataEvent(actiontype, EventTmp) {
             if (actiontype === "add") 
             {
@@ -551,17 +601,70 @@ export default {
                     }
                 }
             }
-        }
-  }
+        },
+
+        /* Change Status of ToDoList or DailyStudy from MyCalendar or MyList */
+        onChangeStatus(eventtype, targetobject){
+            if(eventtype=="dailystudy")
+            {
+                for(var i=0;i<this.UserInfo.DailyStudy.length;+i)
+                {
+                    if( this.UserInfo.DailyStudy[i].name == targetobject.name &&
+                        this.UserInfo.DailyStudy[i].day  == targetobject.day  )
+                    {
+                        this.UserInfo.DailyStudy[i].status=1;
+                        return;
+                    }
+                }
+            }
+            else if(eventtype=="todolist")
+            {
+                for(var i=0;i<this.UserInfo.ToDoList.length;++i)
+                {
+                    if( this.UserInfo.ToDoList[i].name == targetobject.name)
+                    {
+                        this.UserInfo.ToDoList=this.UserInfo.ToDoList.filter(index=>index!==this.UserInfo.ToDoList[i]);
+                        return;
+                    }
+                }
+            }
+            return;            
+        },
+
+
+        /* Change context of project from MyProjectWindow */
+        onChangeContext(eventtype, targetobject){
+
+       },
+
+    /*-----------------------------------------------------------------------*/
+    /*   -----   -----   -----   Event Data Change   -----   -----   -----   */ 
+    /*-----------------------------------------------------------------------*/ 
+
+
+    
+     }
+
 
 }
 </script>
 
 <style>
-.mycontainer{
+.myApp{
     margin-left: 0px;
     margin-right: 0px;
     background-color: #c8e8ed;
+    width: 100%;
+    height: 100%;
+}
+.my-navbar{
+    width: 100%;
+    height: 8.03%;
+}
+
+.my-window{
+     width: 100%;
+    height: 91.97%;
 }
 /*-----     commmon use     ------*/
 

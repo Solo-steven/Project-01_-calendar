@@ -1,6 +1,6 @@
 <template>
           <!-----     Project List Part     --->
-            <div class="card mylist">
+            <div class="card mylist ">
               <div class="card-header navbar" id="dailycoursebotton" >
                   <button class="btn btn-info  mylist-title" data-toggle="collapse" data-target="#dailycourse" type="button">
                     Daily Course
@@ -36,12 +36,12 @@
                      <div class="col mylist-item">
                          <div class="row">
                             <div type="button" class="col" data-toggle="tooltip" data-placement="right" title="click to finish"
-                                 v-on:click="onChangeStatus('dailystudy',study.name)"> 
+                                 v-on:click="emit_ChangeStatus_signal('dailystudy', study)"> 
                               <span class="mylist-item-heading">{{ ListData.day[study.day]+" : "}} </span>
                               {{study.name}}
                             </div>
                             <div class="col-3" style="opacity: .4;">
-                            <transition name="main"> 
+                            <transition name="flip"> 
                                <div v-if="study.status" style="display: inline-block;" key="done" >done</div>
                                <div v-else  style="display: inline-block;" key="todo" >to do</div>
                              </transition>   
@@ -60,10 +60,10 @@
               <div class="collapse" id="todolist" >
                 <div class="card-body" data-spy="scroll" data-target="#todolistbutton" style="height: 100px; overflow-y: scroll;">
                   <transition-group name="fade">
-                    <div class="row"  v-for="todolist in  UserInfo.ToDoList" :key="todolist.name">
+                    <div class="row"  v-for=" todolist in  UserInfo.ToDoList " :key="todolist.name" >
                       <div class="col mylist-item ">
                         <div class="row justify-content-between">
-                          <div type="button" class="col-4" v-on:click="onChangeStatus('todolist',todolist.name)"
+                          <div type="button" class="col-4" v-on:click="emit_ChangeStatus_signal('todolist',todolist)"
                                data-toggle="tooltip" data-placement="right" title="click to finish">
                              {{todolist.name}}
                           </div>
@@ -142,14 +142,19 @@ export default {
             height: 100,
           }
         }
+    },
+    methods:{
+        emit_ChangeStatus_signal(eventtype, targetobject){
+         this.$emit("changeStatus",eventtype, targetobject);
+        },
     }
     
 }
 </script>
 
 <style scoped>
-     /*-----     list     -----*/
 
+/*-----     list     -----*/
 .mylist{
     background: #2b4450;
     color : #dfebed;
