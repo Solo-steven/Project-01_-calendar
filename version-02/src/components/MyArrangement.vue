@@ -14,6 +14,7 @@
          </div>
       </div>
       <div class="card-body">
+
          <div class="row justify-content-left" >
             <div class="col-2 pr-0 pl-2 arrangement-title">
                <span>Course :</span>  
@@ -23,14 +24,15 @@
             </span>
          </div>
          <hr>
+
          <div class="row justify-content-left" >
             <div class="col-2 pr-0 pl-2 arrangement-title">
                   <span>Study Plan :</span>
              </div>
-            <span type="button" class="arrangement-item" v-for="study in ArrangeData.dailystudy" v-on:click="onChangeStatus('dailystudy',study.name)"
+            <span type="button" class="arrangement-item" v-for="study in ArrangeData.dailystudy" v-on:click="emit_changeStatus_singal('dailystudy', study) "
                   data-toggle="tooltip" data-placement="right" title="click to finish" :key="study.name">
                      {{study.name}}
-               <transition name="main" mode="out-in">
+               <transition name="flip" mode="out-in">
                   <div v-if="study.status" style="display: inline-block; opacity: .4;" key="done">
                      {{"(done)"}}
                   </div>
@@ -41,12 +43,13 @@
             </span>
          </div>
          <hr>
+
          <div class="row justify-content-left" >
             <div class="col-2 pr-0 pl-2 arrangement-title" >
                   <span> To do list : </span>
             </div>
             <transition-group name="fade" class="col-10">
-               <span type="button" class="arrangement-item" v-for="todolist in ToDoList" v-on:click="onChangeStatus('todolist',todolist.name)"
+               <span type="button" class="arrangement-item" v-for="todolist in ArrangeData.todolist" v-on:click="emit_changeStatus_singal('todolist', todolist)"
                      data-toggle="tooltip" data-placement="right" title="click to finish" :key="todolist.name">
                   {{todolist.name}}
                   <span v-if="todolist.status" style="opacity: .4;">
@@ -59,6 +62,7 @@
             </transition-group>     
          </div>
          <hr>
+
          <div class="row justify-content-left">
              <div class="col-4 pr-0 pl-2 arrangement-title" >
                   <span>Coming Work Project : </span>
@@ -68,6 +72,7 @@
              </span>
          </div>
          <hr>
+
          <div class="row justify-content-left">
              <div class="col-4 pr-0 pl-2 arrangement-title" >
                   <span>Coming Side Project : </span>
@@ -77,28 +82,120 @@
             </span>
          </div>
          <hr>
+
       </div>
    </div>
-           <!-----     Calendar Part     --->
-
-        
-        <!-----     Project List And Calendar     -->
-
- 
-    
+           
 </template>
 
 <script>
 export default {
     name:"MyArrangement",
+    props:["ArrangeData" /* UserInfo */ ],
+    
+    /*
+    data(){
+      return{
+         ArrangeData:{
+            key: {
+                year: 0,
+                month: 0,
+                date: 0
+            },
+            dailycourse: [],
+            dailystudy: [],
+            todolist: [],
+            workproject: [],
+            sideproject: []
+         }
+      } 
+    },
+    */
+
+    /*
+    created(){
+       //this.$bus.$on("checkArrangement",(year,month,date)=>filterArrangement(year, month, date));
+       //console.log("create arrangement");
+    },
+    */
+    
     methods:{
-       emit_switchCalnedarArrangement_signal(){
+
+      emit_switchCalnedarArrangement_signal(){
           this.$emit("switchCalendarArrangement");
        },
-       emit_changeStatus_singal(evevnttype, targetobject){
-          this.$emit(eventtype , targetobject)
-       }
+
+      emit_changeStatus_singal(eventtype, targetobject){
+          this.$emit("changeStatus" , eventtype , targetobject)
+       },
+
+       /*  --- 
+       fliterArrangement(year, month , date)
+       {
+          console.log("check Arrangement")
+            date = String(date);
+            if (date === "" || date === undefined) {
+                console.log("Arrange check error", typeof (date), date)
+                return;
+            }
+            date = Number(date);
+            var D = new Date(year, month - 1, date);
+            var day = D.getDay();
+            this.ArrangeData.key.year = year;
+            this.ArrangeData.key.month= month;
+            this.ArrangeData.key.date = date;
+
+            this.ArrangeData.dailycourse = this.UserInfo.DailyCourse.filter(index => index.day === day);
+            this.ArrangeData.dailystudy = this.UserInfo.DailyStudy.filter(index => index.day === day);
+            this.ArrangeData.todolist = this.UserInfo.ToDoList;
+            console.log(this.ArrangeData.todolist === this.UserInfo.ToDoList)
+            this.ArrangeData.workproject = this.UserInfo.WorkProject.filter(index => {
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month == this.ArrangeData.key.month &&
+                    index.deadline.date >= this.ArrangeData.key.date &&
+                    index.deadline.date - this.ArrangeData.key.date <= 7) {
+                    return true;
+                }
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month > this.ArrangeData.key.month &&
+                    index.deadline.month - this.ArrangeData.key.month == 1 &&
+                    ((index.deadline.date) - 0) + (31 - this.ArrangeData.key.date) <= 7) {
+                    return true;
+                }
+            });
+            this.ArrangeData.sideproject = this.UserInfo.SideProject.filter(index => {
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month == this.ArrangeData.key.month &&
+                    index.deadline.date >= this.ArrangeData.key.date &&
+                    index.deadline.date - this.ArrangeData.key.date <= 7) {
+                    return true;
+                }
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month > this.ArrangeData.key.month &&
+                    index.deadline.month - this.ArrangeData.key.month == 1 &&
+                    ((index.deadline.date) - 0) + (31 - this.ArrangeData.key.date) <= 7) {
+                    return true;
+                }
+            });
+
+            console.log("Check arrangement : ", year,"(year)", month,"month" ,date,"(date)", day, "(day)");
+            console.log("Today Course : ", this.ArrangeData.dailycourse);
+            console.log("Today Study : ", this.ArrangeData.dailycourse);
+            console.log("Today To Do List: ", this.ArrangeData.todolist);
+            console.log("Coming Work Porject : ", this.ArrangeData.workproject);
+            console.log("Coming Side Project : ", this.ArrangeData.sideproject);
+       },
+    */
+
+
+    },
+
+
+    /*
+    beforeDestroy(){
+       //this.$bus.$off("checkArrangement");
     }
+    */
 }
 </script>
 

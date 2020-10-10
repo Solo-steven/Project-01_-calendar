@@ -220,6 +220,7 @@ export default {
             this.EventTmp.search_object = {};
         },
          emit_upDataEvent(actiontype){ 
+            
             this.$emit("upDataEvent", actiontype, this.EventTmp)
          }
    }    

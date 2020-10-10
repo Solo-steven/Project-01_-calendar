@@ -4,6 +4,8 @@ import './assets/css/animation.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
 
+Vue.prototype.$bus=new Vue();
+
 Vue.config.productionTip = false
 
 new Vue({

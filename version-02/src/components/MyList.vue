@@ -134,6 +134,9 @@
 export default {
     name:"MyList",
     props:["UserInfo"],
+    created(){
+      console.log("List create");
+    },
     data:function (){
         return{
              //--- this object is for show data in project list 
@@ -147,6 +150,9 @@ export default {
         emit_ChangeStatus_signal(eventtype, targetobject){
          this.$emit("changeStatus",eventtype, targetobject);
         },
+    },
+    beforeDestroy(){
+      console.log("list destory");
     }
     
 }

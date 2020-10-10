@@ -19,7 +19,7 @@
                           <MyCalendar v-if="flip==false" 
                                  @checkArrangement="onCheckArrangement">
                           </MyCalendar>
-                          <MyArragenment v-else 
+                          <MyArragenment v-else  :ArrangeData="ArrangeData"
                                  @switchCalendarArrangement="onSwitchCalendarArrangement"
                                  @changeStatus="onChangeStatus">
                           </MyArragenment>
@@ -247,13 +247,26 @@ export default {
   data:function(){
     return {
        flip:false, 
+       ArrangeData:{
+           key: {
+                year: 0,
+                month: 0,
+                date: 0
+            },
+            dailycourse: [],
+            dailystudy: [],
+            todolist: [],
+            workproject: [],
+            sideproject: []
+       },
+
        UserInfo:{
           DailyCourse: user_course,
           DailyStudy: user_study,
           WorkProject: user_workproject,
           SideProject: user_sideproject,
           ToDoList: user_todolist,
-       }
+       },
     }
   },
   methods:{
@@ -261,16 +274,74 @@ export default {
     /*---------------------------------------------------------------------------------------------*/
     /*   Part One   -----   -----   -----  Switch Calendar and Arrangement -----   -----   -----   */ 
     /*---------------------------------------------------------------------------------------------*/
-    onCheckArrangement(date){
+    onCheckArrangement(year, month, date){
       this.onSwitchCalendarArrangement();
+      this.fliterArrangement(year , month, date)
+
     },
+
+    fliterArrangement(year, month , date){
+          console.log("check Arrangement")
+            date = String(date);
+            if (date === "" || date === undefined) {
+                console.log("Arrange check error", typeof (date), date)
+                return;
+            }
+            date = Number(date);
+            var D = new Date(year, month - 1, date);
+            var day = D.getDay();
+            this.ArrangeData.key.year = year;
+            this.ArrangeData.key.month= month;
+            this.ArrangeData.key.date = date;
+
+            this.ArrangeData.dailycourse = this.UserInfo.DailyCourse.filter(index => index.day === day);
+            this.ArrangeData.dailystudy = this.UserInfo.DailyStudy.filter(index => index.day === day);
+            this.ArrangeData.todolist = this.UserInfo.ToDoList;
+            console.log(this.ArrangeData.todolist === this.UserInfo.ToDoList)
+            this.ArrangeData.workproject = this.UserInfo.WorkProject.filter(index => {
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month == this.ArrangeData.key.month &&
+                    index.deadline.date >= this.ArrangeData.key.date &&
+                    index.deadline.date - this.ArrangeData.key.date <= 7) {
+                    return true;
+                }
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month > this.ArrangeData.key.month &&
+                    index.deadline.month - this.ArrangeData.key.month == 1 &&
+                    ((index.deadline.date) - 0) + (31 - this.ArrangeData.key.date) <= 7) {
+                    return true;
+                }
+            });
+            this.ArrangeData.sideproject = this.UserInfo.SideProject.filter(index => {
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month == this.ArrangeData.key.month &&
+                    index.deadline.date >= this.ArrangeData.key.date &&
+                    index.deadline.date - this.ArrangeData.key.date <= 7) {
+                    return true;
+                }
+                if (index.deadline.year == this.ArrangeData.key.year &&
+                    index.deadline.month > this.ArrangeData.key.month &&
+                    index.deadline.month - this.ArrangeData.key.month == 1 &&
+                    ((index.deadline.date) - 0) + (31 - this.ArrangeData.key.date) <= 7) {
+                    return true;
+                }
+            });
+
+            console.log("Check arrangement : ", year,"(year)", month,"month" ,date,"(date)", day, "(day)");
+            console.log("Today Course : ", this.ArrangeData.dailycourse);
+            console.log("Today Study : ", this.ArrangeData.dailycourse);
+            console.log("Today To Do List: ", this.ArrangeData.todolist);
+            console.log("Coming Work Porject : ", this.ArrangeData.workproject);
+            console.log("Coming Side Project : ", this.ArrangeData.sideproject);
+    },
+
     onSwitchCalendarArrangement(){  
       this.flip= !this.flip;
     },
 
-    /*----------------------------------------------------------------------------------*/
-    /*   -----   -----   -----  Switch Calendar and Arrangement -----   -----   -----   */ 
-    /*----------------------------------------------------------------------------------*/
+    /*--------------------------------------------------------------------------------------------*/
+    /*   Above :  -----   -----   -----  Switch Calendar and Arrangement -----   -----   -----    */ 
+    /*--------------------------------------------------------------------------------------------*/
     
 
     /*----------------------------------------------------------------------------------*/
@@ -605,9 +676,11 @@ export default {
 
         /* Change Status of ToDoList or DailyStudy from MyCalendar or MyList */
         onChangeStatus(eventtype, targetobject){
+            console.log("in Vue");
             if(eventtype=="dailystudy")
             {
-                for(var i=0;i<this.UserInfo.DailyStudy.length;+i)
+                
+                for(var i=0;i<this.UserInfo.DailyStudy.length;++i)
                 {
                     if( this.UserInfo.DailyStudy[i].name == targetobject.name &&
                         this.UserInfo.DailyStudy[i].day  == targetobject.day  )
@@ -623,7 +696,9 @@ export default {
                 {
                     if( this.UserInfo.ToDoList[i].name == targetobject.name)
                     {
+                        
                         this.UserInfo.ToDoList=this.UserInfo.ToDoList.filter(index=>index!==this.UserInfo.ToDoList[i]);
+                        this.ArrangeData.todolist = this.UserInfo.ToDoList;
                         return;
                     }
                 }
@@ -631,20 +706,17 @@ export default {
             return;            
         },
 
-
         /* Change context of project from MyProjectWindow */
         onChangeContext(eventtype, targetobject){
 
        },
 
-    /*-----------------------------------------------------------------------*/
-    /*   -----   -----   -----   Event Data Change   -----   -----   -----   */ 
-    /*-----------------------------------------------------------------------*/ 
-
+    /*--------------------------------------------------------------------------------*/
+    /*   Above :  -----   -----   -----   Event Data Change   -----   -----   -----   */ 
+    /*--------------------------------------------------------------------------------*/ 
 
     
      }
-
 
 }
 </script>

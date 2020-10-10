@@ -149,7 +149,9 @@ export default {
         },
          
         emit_checkArrangement_singal(date){
-            this.$emit("checkArrangement",date);
+           //this.$bus.$emit(checkArrangement', this.WindowData.key.year, this.WindowData.key.month, date)) ;
+           //this.$emit("switchCalendarArrangement"); 
+           this.$emit('checkArrangement', this.WindowData.key.year, this.WindowData.key.month, date);
         } 
     }
 }
