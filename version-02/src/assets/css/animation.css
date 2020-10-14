@@ -1,3 +1,5 @@
+
+
 /* animation of  fade item */
 .fade-enter,
 .fade-leave-to{
@@ -13,8 +15,6 @@
 .fade-leave-active{
     transition: all .8s ease;
 }
-
-
 
 
 /* animation of flip page */
@@ -43,3 +43,6 @@
 .flip-leave-active{
    display: none;
 }
+
+
+/* animation of rotation itself */

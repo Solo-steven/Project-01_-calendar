@@ -1,44 +1,55 @@
 <template>
 <div id="app" class="myApp"> 
+
    <div class="container-fluid p-0  fill-heigth fill-width">
        <div class="row my-navbar m-0" >
           <div class="col p-0">
                <MyNavbar></MyNavbar>
           </div>
        </div>
+
        <div class="row my-window m-0 justify-content-center">
            <div class="col-4 p-0 fade collapse " id="list">
                <MyList :UserInfo="UserInfo" 
-                       @changeStatus="onChangeStatus">
+                       @changeStatus="onChangeStatus"
+                       @checkProject="onCheckProject">
                </MyList>
            </div>
            <div class="col-8 p-0">
                <div class="row m-0 fill-heigth justify-content-center align-content-center">
                    <div class="col p-0 ">
+                        
                         <transition name="flip"> 
-                          <MyCalendar v-if="flip==false" 
+                          <MyCalendar v-if=" flip==false &&block== false " 
                                  @checkArrangement="onCheckArrangement">
                           </MyCalendar>
-                          <MyArragenment v-else  :ArrangeData="ArrangeData"
+                          <MyArragenment v-if="flip==true && block ==false "  :ArrangeData="ArrangeData"
                                  @switchCalendarArrangement="onSwitchCalendarArrangement"
                                  @changeStatus="onChangeStatus">
                           </MyArragenment>
+                          <MyProjectWindow v-if="block==true" :Project= "ProjectData">
+                         </MyProjectWindow>
                         </transition> 
+                       
                    </div>
                </div>
            </div>
        </div>
+
    </div> 
   <MyModal :UserInfo="UserInfo" @upDataEvent="onUpDataEvent"></MyModal> 
 </div>
 </template>
 
 <script>
+import ProjectInterface from "./ProjectInterface.js"
+
 import MyModal from './components/MyModal.vue'
 import MyNavbar from './components/MyNavbar'
 import MyList from './components/MyList'
 import MyCalendar from './components/MyCalendar.vue'
 import MyArragenment from './components/MyArrangement.vue'
+import MyProjectWindow from './components/MyProjectWindow'
 //import {user_course , user_study, user_workproject, user_sideproject, user_todolist} from './TestInfo'
 
 const user_course=[
@@ -184,7 +195,7 @@ const  user_workproject=[
           month:"10",
           date: "8", 
       },
-      status:0
+       body:new ProjectInterface()
     },
     {
         name:"普物-HW3",
@@ -193,7 +204,7 @@ const  user_workproject=[
             month:"10",
             date: "7", 
         },
-        status:0
+        body:new ProjectInterface()
     },
     {
         name: "Test-Work-Project",
@@ -201,7 +212,8 @@ const  user_workproject=[
             year:"2020",
             month:"11",
             date:"5"
-        }
+        },
+        body:new ProjectInterface()
     }
 ]
 
@@ -213,7 +225,7 @@ const user_sideproject=[
             month:"10",
             date: "15", 
         },
-        status:0
+        body: new ProjectInterface(),
     },
     {
         name:"CCNA - 第六章完",
@@ -222,7 +234,7 @@ const user_sideproject=[
             month:"10",
             date: "20", 
         },
-        status:0
+        body: new ProjectInterface(),
     },
     {
         name:"Test-Side-Project",
@@ -230,7 +242,8 @@ const user_sideproject=[
             year:"2020",
             month: "11",
             date: "2"
-         }
+         },
+        body: new ProjectInterface(), 
     }
 ]
 
@@ -241,8 +254,9 @@ export default {
     MyModal,
     MyNavbar,
     MyList,
-    MyCalendar,
-    MyArragenment
+   MyCalendar,
+    MyArragenment,
+    MyProjectWindow,
   },
   data:function(){
     return {
@@ -267,7 +281,22 @@ export default {
           SideProject: user_sideproject,
           ToDoList: user_todolist,
        },
+       block:false,
+       ProjectData:{ 
+           name : "Test-Project-Name",
+           deadline:{
+                year:2020,
+                month : 11,
+                date :23,
+           },
+           body :  new ProjectInterface("New Title","Context")
+       },
     }
+  },
+  created(){
+         //this.ProjectData.body.addCurrentChild("Title-1","context-1");
+         //this.ProjectData.body.addCurrentChild("Title-2","context-2");
+         //console.log(this.ProjectData.body);
   },
   methods:{
     
@@ -408,7 +437,7 @@ export default {
                                 month: EventTmp.deadline.month,
                                 date: EventTmp.deadline.date
                             },
-                            status: 0
+                            body:new ProjectInterface(),
                         });
                         this.UserInfo.WorkProject.sort(this.sortProject);
                         console.log("Add - Updata - WorkProject " ,this.UserInfo.WorkProject);
@@ -422,7 +451,7 @@ export default {
                                 month: EventTmp.deadline.month,
                                 date: EventTmp.deadline.date
                             },
-                            status: 0
+                            body:new ProjectInterface(),
                         });
                         this.UserInfo.SideProject.sort(this.sortProject);
                         console.log("Add - Updata - SideProject ", this.UserInfo.SideProject);
@@ -523,7 +552,6 @@ export default {
                                 month: EventTmp.deadline.month,
                                 date: EventTmp.deadline.date
                             },
-                            status: 0
                         }
                         this.UserInfo.WorkProject.sort(this.sortProject);
                         console.log(" Modify - Updata - WorkProject ", this.UserInfo.WorkProject);   
@@ -544,7 +572,6 @@ export default {
                                 month: EventTmp.deadline.month,
                                 date: EventTmp.deadline.date
                             },
-                            status: 0
                         };
                         this.UserInfo.SideProject.sort(this.sortProject);
                         console.log(" Modify - Updata - DailyCourse ", this.UserInfo.SideProject);   
@@ -714,7 +741,13 @@ export default {
     /*--------------------------------------------------------------------------------*/
     /*   Above :  -----   -----   -----   Event Data Change   -----   -----   -----   */ 
     /*--------------------------------------------------------------------------------*/ 
-
+        onSwithProject(){
+           this.block=!this.block;
+        },
+        onCheckProject(project){
+           this.onSwithProject();
+           this.ProjectData=project;
+        }
     
      }
 

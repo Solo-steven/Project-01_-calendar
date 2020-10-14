@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import AddModal from './AddModal.vue'
-import DeleteModal from './DeleteModal.vue'
-import ModifyModal from './ModifyModal.vue'
+import AddModal from "./Event-Modal/AddModal.vue"
+import DeleteModal from "./Event-Modal/DeleteModal.vue"
+import ModifyModal from "./Event-Modal/ModifyModal.vue"
 
 export default {
     name:"MyModal",
@@ -221,7 +221,7 @@ export default {
         },
          emit_upDataEvent(actiontype){ 
             
-            this.$emit("upDataEvent", actiontype, this.EventTmp)
+             this.$emit("upDataEvent", actiontype, this.EventTmp)
          }
    }    
     

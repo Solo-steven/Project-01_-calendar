@@ -86,7 +86,7 @@
             </div>
             <div class="collapse" id="workproject">
               <div class="card-body " data-spy="scroll" data-target="#worlprojectbutton" style="height: 130px; overflow-y: scroll;">
-                  <div class="row" v-for="project in UserInfo.WorkProject" :key="project.name">
+                  <div class="row" v-for="project in UserInfo.WorkProject" :key="project.name" @click="emit_checkProject_signal(project)">
                       <div class="col mylist-item">
                         <div class="row">
                            <div class="col">
@@ -109,7 +109,7 @@
             </div>
             <div class="collapse" id="sideproject">
               <div class="card-body" data-spy="scroll" data-target="#sideprojectbutton" style="height: 130px; overflow-y: scroll;">
-                <div class="row" v-for="project in UserInfo.SideProject" :key="project.name">
+                <div class="row" v-for="project in UserInfo.SideProject" :key="project.name" @click="emit_checkProject_signal(project)">
                     <div class="col mylist-item " >
                        <div class="row justify-content-between">
                           <div class="col">
@@ -134,9 +134,11 @@
 export default {
     name:"MyList",
     props:["UserInfo"],
+    /*
     created(){
       console.log("List create");
     },
+    */
     data:function (){
         return{
              //--- this object is for show data in project list 
@@ -150,10 +152,15 @@ export default {
         emit_ChangeStatus_signal(eventtype, targetobject){
          this.$emit("changeStatus",eventtype, targetobject);
         },
+        emit_checkProject_signal(project){
+          this.$emit("checkProject",project);
+        }
     },
+    /*
     beforeDestroy(){
       console.log("list destory");
     }
+    */
     
 }
 </script>
