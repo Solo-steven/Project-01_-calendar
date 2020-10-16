@@ -43,8 +43,20 @@ export default {
          }
     },
     methods: {
+         onCheckLegalData(){
+           if(this.TmpData.title ==="" || this.TmpData.content ==="")
+           {
+              return true;
+            }
+            return false;
+        },
         emit_addCurrentChild_signal(){
-            this.$emit("addCurrentChild", this.TmpData);
+            if (!this.onCheckLegalData())
+             { 
+                 this.$emit("addCurrentChild", this.TmpData);
+                 return ;
+             }
+            window.alert("Input error!!"); 
         }
     }
 

@@ -45,7 +45,6 @@ export default {
        emit_changeCurrentContent(){
            if(!this.onCheckLegalData())
            {
-                 console.log("emit")
                  this.$emit("changeCurrentContent",this.TmpData);
                  return;
            }

@@ -36,6 +36,11 @@
               </div>
          </div>
          <div class="card-body scroll " data-target="#projectwindow-navbar">
+
+             <div>
+                  <h5>{{Project.body.currentNode.title}}</h5>
+                  <p>{{Project.body.currentNode.context}} </p>
+             </div>
              <div v-for="(child , index) in Project.body.currentNode.child" :key="index">
                  <h5 class="card-title" @click="onGoToChild(index)">
                      {{child.title}}
@@ -45,6 +50,7 @@
                   </p>
                  <hr>  
              </div> 
+
          </div>
     </div>
      <ProjectAddModal id="projectadd"
@@ -80,7 +86,7 @@ export default {
    },
    methods:{
        
-       /* Done -need test */
+       /* Done */
        onBackToRoot(){
          this.Project.body.backToRoot();
        },
@@ -88,7 +94,7 @@ export default {
        onBackToPrevious(){
          this.Project.body.backToFather();
        },
-       /* Done -need test */
+       /* Done*/
        onGoToChild(index){
            if(this.Project.body.current.child[index].child.length !==0)
              this.Project.body.currentNode=this.Project.body.currentNode.child[index];         
@@ -114,8 +120,8 @@ export default {
 
 <style scoped>
 .my-project-window{
-    /*max-width: 600px;
-    min-height: 420px;*/
+    /*max-width: 600px;*/
+    min-height: 420px;
     background: #2b4450;
     color : #dfebed;
     border-radius: 4px;
@@ -132,5 +138,8 @@ export default {
 .mynav-tool-block{
     display: flex;
     flex-direction: row;
+}
+.my-project-window-body{
+    max-height: 400px;
 }
 </style>
