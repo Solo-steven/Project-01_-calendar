@@ -31,12 +31,14 @@
                              </button>
                              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#projectchange">
                                  Change
-                              </button>   
+                              </button> 
+                             <button type="button" class="btn btn-info" @click="emit_onSwitchProject_signal">
+                                 Close
+                             </button>       
                         </div>
               </div>
          </div>
          <div class="card-body scroll " data-target="#projectwindow-navbar">
-
              <div>
                   <h5>{{Project.body.currentNode.title}}</h5>
                   <p>{{Project.body.currentNode.context}} </p>
@@ -55,8 +57,8 @@
     </div>
      <ProjectAddModal id="projectadd"
        @addCurrentChild="onAddCurrentChild"></ProjectAddModal>
-    <ProjectChangeModal id="projectchnage"
-       @chnageCurrentCntent="onChangeCurrentContent"></ProjectChangeModal>   
+    <ProjectChangeModal id="projectchange"
+       @changeCurrentCocntent="onChangeCurrentContent"></ProjectChangeModal>   
 
  </div>   
 </template>
@@ -82,10 +84,14 @@ export default {
       }
    },
    created(){
-      console.log(this.Project);
+     // console.log(this.Project);
    },
    methods:{
        
+       emit_onSwitchProject_signal(){
+          this.$emit("switchProject");
+       },
+
        /* Done */
        onBackToRoot(){
          this.Project.body.backToRoot();
@@ -100,19 +106,16 @@ export default {
              this.Project.body.currentNode=this.Project.body.currentNode.child[index];         
        },
 
-
-       onProjectAddModal(){
-             
-       },
        /* Done -need test */
        onChangeCurrentContent(TmpData){
-           this.Project.body.changeCurrentContent(TmpData.title, TmpData.context);
+           console.log(TmpData);
+           this.Project.body.changeCurrentContent(TmpData.title, TmpData.content);
        },
        /* Done -need test */
        onAddCurrentChild(TmpData){
            console.log("in project window", TmpData);
            console.log(this.Project.body)
-           this.Project.body.addCurrentChild(TmpData.title,TmpData.context);
+           this.Project.body.addCurrentChild(TmpData.title,TmpData.content);
        },
    }
 }
@@ -120,7 +123,7 @@ export default {
 
 <style scoped>
 .my-project-window{
-    /*max-width: 600px;*/
+    max-width: 700px;
     min-height: 420px;
     background: #2b4450;
     color : #dfebed;

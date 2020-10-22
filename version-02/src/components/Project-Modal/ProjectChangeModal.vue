@@ -1,7 +1,7 @@
 <template>
     <div class="modal">
         <div class="modal-dialog">
-            <div class="modal-ontent">
+            <div class="modal-content">
                 <div class="modal-header">
                    <div class="nodal-title">Change Content </div>
                 </div>
@@ -16,7 +16,7 @@
                    </div>
                 </div>
                 <div class="modal-footer">
-                     <button type="button" class="btn btn-primary" > Submit</button>
+                     <button type="button" class="btn btn-primary" @click="emit_changeCurrentContent_signal"> Submit</button>
                 </div>
             </div>
         </div>
@@ -42,7 +42,8 @@ export default {
          }
          return false;
        },
-       emit_changeCurrentContent(){
+       emit_changeCurrentContent_signal(){
+           console.log(this.TmpData);
            if(!this.onCheckLegalData())
            {
                  this.$emit("changeCurrentContent",this.TmpData);

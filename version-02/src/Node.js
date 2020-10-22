@@ -45,6 +45,7 @@ export default class Node {
     changeContent(title, context) {
         this.title = title;
         this.context = context;
+        console.log(this.title, this.context);
     };
 
     /* -- Remove Child From This Node -- */
@@ -140,15 +141,3 @@ export default class Node {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

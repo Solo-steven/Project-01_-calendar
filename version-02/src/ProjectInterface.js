@@ -10,7 +10,7 @@ export default class ProjectInterface {
         this.currentNode = this.root;
     }
     backToFather() {
-        if (this.currentNode.parent !== undefined)
+        if (this.currentNode.parent !== undefined || this.currentNode.parent !== null)
             this.currentNode = this.currentNode.parent;
     }
     goToChild(index) {

@@ -27,7 +27,8 @@
                                  @switchCalendarArrangement="onSwitchCalendarArrangement"
                                  @changeStatus="onChangeStatus">
                           </MyArragenment>
-                          <MyProjectWindow v-if="block==true" :Project= "ProjectData">
+                          <MyProjectWindow v-if="block==true" :Project= "ProjectData" 
+                                 @switchProject="onSwitchProject" >
                          </MyProjectWindow>
                         </transition> 
                        
@@ -736,16 +737,16 @@ export default {
         /* Change context of project from MyProjectWindow */
         onChangeContext(eventtype, targetobject){
 
-       },
+         },
 
     /*--------------------------------------------------------------------------------*/
     /*   Above :  -----   -----   -----   Event Data Change   -----   -----   -----   */ 
     /*--------------------------------------------------------------------------------*/ 
-        onSwithProject(){
+        onSwitchProject(){
            this.block=!this.block;
         },
         onCheckProject(project){
-           this.onSwithProject();
+           this.onSwitchProject();
            this.ProjectData=project;
         }
     
