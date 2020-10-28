@@ -113,7 +113,7 @@ export default class Node {
     /* ------ certain use for leaf node : complet a leaf ------ */
     completNode(percent, spend_hour) {
         if (this.child.length == 0 && this.completeness < 100) {
-            this.completeness = percent;
+            this.completeness = 100;
             this.spendHour = spend_hour;
             return;
         }

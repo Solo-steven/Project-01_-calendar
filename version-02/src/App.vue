@@ -8,7 +8,7 @@
           </div>
        </div>
 
-       <div class="row my-window m-0 justify-content-center">
+       <div class="row my-window m-0 p-0 justify-content-center">
            <div class="col-4 p-0 fade collapse " id="list">
                <MyList :UserInfo="UserInfo" 
                        @changeStatus="onChangeStatus"

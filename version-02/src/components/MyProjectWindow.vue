@@ -26,15 +26,15 @@
                              <button type="button" class="btn btn-info" @click="onBackToPrevious">
                                  Previous
                              </button> 
-                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#projectadd">
+                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#projectadd" @addCurrentChild=" onAddCurrentChild">
                                  Add
                              </button>
                              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#projectchange">
-                                 Change
+                                 Change 
                               </button> 
                              <button type="button" class="btn btn-info" @click="emit_onSwitchProject_signal">
                                  Close
-                             </button>       
+                             </button>   
                         </div>
               </div>
          </div>
@@ -46,14 +46,18 @@
              <div v-for="(child , index) in Project.body.currentNode.child" :key="index">
                  <h5 class="card-title" @click="onGoToChild(index)">
                      {{child.title}}
+                     <span v-if="child.child.length ===0 " @click="onCompletLeaf(index)">Complet </span>
                  </h5>  
                  <p class="card-text">
                      {{child.context}}
                   </p>
                  <hr>  
              </div> 
-
          </div>
+         <div class="card-footer">
+              <span>{{"Completness : " + Project.body.currentNode.completeness}}</span>
+         </div>
+
     </div>
      <ProjectAddModal id="projectadd"
        @addCurrentChild="onAddCurrentChild"></ProjectAddModal>
@@ -91,7 +95,9 @@ export default {
        emit_onSwitchProject_signal(){
           this.$emit("switchProject");
        },
-
+       onCompletLeaf(index){
+           this.Project.body.completLeaf(index,1);
+       },
        /* Done */
        onBackToRoot(){
          this.Project.body.backToRoot();
@@ -125,6 +131,7 @@ export default {
 .my-project-window{
     max-width: 700px;
     min-height: 420px;
+    margin: auto;
     background: #2b4450;
     color : #dfebed;
     border-radius: 4px;
