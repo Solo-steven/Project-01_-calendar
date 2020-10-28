@@ -39,23 +39,41 @@
               </div>
          </div>
          <div class="card-body scroll " data-target="#projectwindow-navbar">
-             <div>
-                  <h5>{{Project.body.currentNode.title}}</h5>
-                  <p>{{Project.body.currentNode.context}} </p>
+             <div class="row m-0 p-0 ">
+                 <div class="col m-0 p-0">
+                      <h5>{{Project.body.currentNode.title}}</h5>
+                 </div>
              </div>
+
+             <div class="row m-0 p-0">
+                 <div class="col m-0 p-0">
+                     <p>{{Project.body.currentNode.context}} </p>
+                 </div>
+             </div>
+
              <div v-for="(child , index) in Project.body.currentNode.child" :key="index">
-                 <h5 class="card-title" @click="onGoToChild(index)">
-                     {{child.title}}
-                     <span v-if="child.child.length ===0 " @click="onCompletLeaf(index)">Complet </span>
-                 </h5>  
-                 <p class="card-text">
-                     {{child.context}}
-                  </p>
-                 <hr>  
+             <div class="row m-0 p-0">
+                 <div class="col m-0 p-0">
+                     <h5 class="card-title " @click="onGoToChild(index)">
+                         {{child.title}}
+                     </h5>  
+                 </div>
+                 <div class="col-2">
+                     <button type="button" class="btn btn-info" v-if="child.child.length ===0 " @click="onCompletLeaf(index)">Complet </button>
+                 </div>
+             </div>
+             <div class="row m-0 p-0">    
+                 <div class="col m-0 p-0">
+                     <p class="card-text">
+                      {{child.context}}
+                     </p>
+                 </div> 
+             </div> 
+              <hr> 
              </div> 
          </div>
          <div class="card-footer">
-              <span>{{"Completness : " + Project.body.currentNode.completeness}}</span>
+              <span>{{"Completness : " + Project.body.currentNode.completeness + "%"}}</span>
          </div>
 
     </div>
